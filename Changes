@@ -1,6 +1,8 @@
 Revision history for Perl extension DBIx::Password.
 
-1.3 Fri September  8 11:58:29 2000 
+1.4 Sep 13 19:09:04 PDT 2000
+	-Added dummy file for CPAN
+1.3 Sep  8 11:58:29 2000 
 	-Added support for PostgreSQL
 	-Added port for MySQL
 	-Added support for just adding in the connect string raw
