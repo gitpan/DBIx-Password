@@ -3,7 +3,7 @@ Makefile.PL
 MANIFEST
 test.pl-orig
 Password.pm-orig
-MakePauseHappy.pm
+Password.pm
 LICENSE
 README
 VERSION

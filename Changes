@@ -1,5 +1,8 @@
 Revision history for Perl extension DBIx::Password.
 
+1.6 Mon Nov  6 13:44:10 PST 2000
+	-Fixed each operator
+	-Removed MakePauseHappy.
 1.5 Sun Oct 22 12:30:21 PDT 2000
 	-Added checkVirtualUser
 	-Added connect_cached
