@@ -18,41 +18,23 @@ if (-e '.cache') {
 	}
 }
 
+my %driver_methods = (
+		'mysql' => \&createMySQL,
+		'Pg' => \&createPostgreSQL,
+);
+
 print "What is the name of the Virtual User?\n";
 my $virtual  = getLine();
 while ($virtual) {
-	my %attributes;
 	print "What is the dbi driver? (AKA mysql)\n";
 	my $driver  = getLine();
-	print "What is the name of the database?\n";
-	my $database  = getLine();
-	print "What is the name of the machine that the database is on?\n";
-	my $hostname  = getLine();
-	my $connect = "DBI:$driver:database=$database;host=$hostname";
-	print "What is the username?\n";
-	my $username  = getLine();
-	print "What is the password?\n";
-	my $password  = getLine();
-	print "What attributes would you like to add?\n";
-	print "(Enter nothing to skip or finish)\n";
-	my $attr  = getLine();
-	while($attr) {
-		print "What is the value of the attribute?\n";
-		my $value  = getLine();
-		$attributes{$attr} = $value;
-		print "What attributes would you like to add?\n";
-		print "(Enter nothing to skip or finish)\n";
-		$attr  = getLine();
+	if($driver_methods{$driver}) {
+		$driver_methods{$driver}->($virtual, $driver);
+	} else {
+		print "Unsupported driver, send mail to brian\@tangent.org about supporting it. \n";
+		print "For now we will let you just enter the connect string by hand. \n";
+		createDefault($driver);
 	}
-	$virtuals->{$virtual} = {
-			connect => $connect,
-			driver => $driver,
-			database => $database,
-			host => $hostname,
-			username => $username,
-			password => $password,
-			attributes => \%attributes
-			};
 	$virtual = undef;
 	print "What is the name of the Virtual User?\n";
 	print "(Enter nothing if you are finished adding users.)\n";
@@ -123,4 +105,82 @@ sub makeCache {
 	open(FILEHANDLE, ">.cache"); 
 	print FILEHANDLE $dumped;
 	close (FILEHANDLE);
+}
+
+sub createMySQL {
+	my %attributes;
+	my $driver = 'mysql';
+	print "What is the name of the database?\n";
+	my $database  = getLine();
+	print "What is the name of the machine that the database is on?\n";
+	my $hostname  = getLine();
+	my $connect = "DBI:$driver:database=$database;host=$hostname";
+	print "Is the database on any special port(you should probably just hit return)?\n";
+	my $port  = getLine();
+	$connect .= ";port=$port" if $port;
+	print "What is the username?\n";
+	my $username  = getLine();
+	print "What is the password?\n";
+	my $password  = getLine();
+	print "What attributes would you like to add?\n";
+	print "(Enter nothing to skip or finish)\n";
+	my $attr  = getLine();
+	while($attr) {
+		print "What is the value of the attribute?\n";
+		my $value  = getLine();
+		$attributes{$attr} = $value;
+		print "What attributes would you like to add?\n";
+		print "(Enter nothing to skip or finish)\n";
+		$attr  = getLine();
+	}
+	$virtuals->{$virtual} = {
+			connect => $connect,
+			driver => $driver,
+			database => $database,
+			host => $hostname,
+			port => $port,
+			username => $username,
+			password => $password,
+			attributes => \%attributes
+			};
+}
+sub createPostgreSQL {
+	my $driver = 'Pg';
+	print "What is the name of the database?\n";
+	my $database  = getLine();
+	print "What is the name of the machine that the database is on?\n";
+	my $hostname  = getLine();
+	my $connect = "DBI:$driver:dbname=$database;host=$hostname";
+	print "Is the database on any special port(you should probably just hit return)?\n";
+	my $port  = getLine();
+	$connect .= ";port=$port" if $port; 
+	print "What is the username?\n";
+	my $username  = getLine();
+	print "What is the password?\n";
+	my $password  = getLine();
+	$virtuals->{$virtual} = {
+			connect => $connect,
+			driver => $driver,
+			database => $database,
+			host => $hostname,
+			port => $port,
+			username => $username,
+			password => $password,
+			};
+}
+
+sub createDefault{
+	my ($driver) = @_;
+	print "What is the connect string?\n";
+	my $connect  = getLine();
+	print "What is the username?\n";
+	my $username  = getLine();
+	print "What is the password?\n";
+	my $password  = getLine();
+	$virtuals->{$virtual} = {
+			connect => $connect,
+			driver => $driver,
+			username => $username,
+			password => $password,
+			};
 }
