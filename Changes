@@ -1,0 +1,5 @@
+Revision history for Perl extension DBIx::Password.
+
+0.01  Fri Jun 30 11:26:39 2000
+	- Created Makefile to make it easier for others to install
+
