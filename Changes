@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Password.
 
+1.7 Wed Dec 20 13:45:29 PST 2000
+	-Returns undef if DBI connect fails (never has 
+	 occured to me, but I can certainly see it being
+	 a problem).
 1.6 Mon Nov  6 13:44:10 PST 2000
 	-Fixed each operator
 	-Removed MakePauseHappy.

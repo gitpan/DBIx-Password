@@ -3,9 +3,21 @@ use strict;
 use DBI();
 
 @DBIx::Password::ISA = qw ( DBI::db );
-($DBIx::Password::VERSION) = ' $Revision: 1.7 $ ' =~ /\$Revision:\s+([^\s]+)/;
+($DBIx::Password::VERSION) = ' $Revision: 1.8 $ ' =~ /\$Revision:\s+([^\s]+)/;
 
-#PASSWORD_INSERT
+my $virtual1 = {
+              'slash' => {
+                           'username' => '',
+                           'password' => '',
+                           'port' => '',
+                           'database' => 'sdf',
+                           'attributes' => {},
+                           'connect' => 'DBI:mysql:database=sdf;host=asf',
+                           'driver' => 'mysql',
+                           'host' => 'asf'
+                         }
+            };
+
 
 my %driver_cache;
 
@@ -37,6 +49,7 @@ sub connect_cached {
 			, $virtual->{'password'}
 			, $virtual->{'attributes'}
 			);
+	return unless $self;
 	bless $self, $class;
 	$driver_cache{$self} = $user;
 	return $self;
@@ -135,7 +148,7 @@ Be sure to answer the questions as you make the module
 
 =head1 HOME
 
-To find out more information look at: http://www.tangent.org/DBIx-Password/
+To find out more information look at: http://software.tangent.org/projects.pl?view=DBIxPassword
 
 =head1 AUTHOR
 
