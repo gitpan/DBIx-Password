@@ -5,8 +5,10 @@ NAME
 SYNOPSIS
       use DBIx::Password;
       my $dbh = DBIx::Password->connect($user);
+      my $dbh = DBIx::Password->connect_cached($user);
       $dbh->getDriver;
       DBIx::Password::getDriver($user);
+      DBIx::Password::checkVirtualUser($user);
 
 DESCRIPTION
     Don't you hate keeping track of database passwords and such
@@ -27,9 +29,14 @@ DESCRIPTION
     determine what driver is being used (handy for working out
     database indepence issues).
 
-    Once your are done you can use the connect method that comes
-    with DBIx-Password and just specify one of the virtual users you
-    defined while making the module.
+    If you want to find out if the virtual user is valid, you can
+    call the class method checkVirtualUser(). It returns true (1) if
+    the username is valid, and zero if not.
+
+    Once your are done you can use the connect method (or the
+    connect_cache method) that comes with DBIx-Password and just
+    specify one of the virtual users you defined while making the
+    module.
 
     BTW I learned the bless hack that is used from Apache::DBI so
     some credit should go to the authors of that module. This is a

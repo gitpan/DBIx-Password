@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Password.
 
+1.5 Sun Oct 22 12:30:21 PDT 2000
+	-Added checkVirtualUser
+	-Added connect_cached
+	-More fixes to dummy file
 1.4 Sep 13 19:09:04 PDT 2000
 	-Added dummy file for CPAN
 1.3 Sep  8 11:58:29 2000 
