@@ -5,6 +5,8 @@ NAME
 SYNOPSIS
       use DBIx::Password;
       my $dbh = DBIx::Password->connect($user);
+      $dbh->getDriver;
+      DBIx::Password::getDriver($user);
 
 DESCRIPTION
     Don't you hate keeping track of database passwords and such
@@ -14,10 +16,16 @@ DESCRIPTION
     virtual users. For each user you need to specify the database
     module to use, the database connect string, the username and the
     password. You will be prompted to give a name to this virtual
-    user. You can add as many as you like. I would recommend that if
-    you are only using this with web applications that you change
-    the final permissions on this package after it is installed in
-    site_perl such that only the webserver can read it.
+    user. You can add as many as you like.
+
+    I would recommend that if you are only using this with web
+    applications that you change the final permissions on this
+    package after it is installed in site_perl such that only the
+    webserver can read it.
+
+    A method called getDriver has been added so that you can
+    determine what driver is being used (handy for working out
+    database indepence issues).
 
     Once your are done you can use the connect method that comes
     with DBIx-Password and just specify one of the virtual users you

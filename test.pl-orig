@@ -22,10 +22,15 @@ print "##################Note!#########################\n";
 print "If you are not on the machine that will be using \n";
 print "these passwords this will most likely fail. \n";
 
+print "Now, lets test getDriver() by itself\n";
+print "Finding driver:" . DBIx::Password::getDriver($_) . "\n" 
+	for (keys %$virtual1);
+
 print "Now, lets see if we can make create objects\n";
 while (my ($key, $val) = each %$virtual1) {	
 	print "Trying: $key\n";
 	my $object = DBIx::Password->connect($key);
+	print "Finding driver:" . $object->getDriver() . "\n";
 	$object->disconnect;
 }
 print "ok 2\n";

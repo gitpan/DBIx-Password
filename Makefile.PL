@@ -5,13 +5,30 @@ use strict;
 # Let's ask some questions
 
 my $virtuals = {};
+my $dumped;
+
+if (-e '.cache') {
+	print "Oh, I can see that you have run me before, should I reuse these?(y or n)\n";
+	my $answer  = getLine();
+	if($answer eq 'y') {
+		open(FILEHANDLE, "<.cache");
+		my @file = <FILEHANDLE>;
+		$dumped = join ('', @file);
+		goto JUMPOINT;
+	}
+}
+
 print "What is the name of the Virtual User?\n";
 my $virtual  = getLine();
-
 while ($virtual) {
 	my %attributes;
-	print "What is the connect string?\n";
-	my $connect  = getLine();
+	print "What is the dbi driver? (AKA mysql)\n";
+	my $driver  = getLine();
+	print "What is the name of the database?\n";
+	my $database  = getLine();
+	print "What is the name of the machine that the database is on?\n";
+	my $hostname  = getLine();
+	my $connect = "DBI:$driver:database=$database;host=$hostname";
 	print "What is the username?\n";
 	my $username  = getLine();
 	print "What is the password?\n";
@@ -29,6 +46,9 @@ while ($virtual) {
 	}
 	$virtuals->{$virtual} = {
 			connect => $connect,
+			driver => $driver,
+			database => $database,
+			host => $hostname,
 			username => $username,
 			password => $password,
 			attributes => \%attributes
@@ -44,9 +64,11 @@ my $data = Data::Dumper->new([$virtuals]);
 $data->Purity(1);
 $data->Indent(3);
 $data->Varname('virtual');
-my $dumped = $data->Dump();
+$dumped = $data->Dump();
+JUMPOINT:
 makeFile();
 makeTest();
+makeCache();
 
 #Now, lets grab the version
 open (FILEHANDLE, "VERSION");
@@ -94,5 +116,11 @@ sub makeTest {
 			print FILEHANDLE ("$_\n");
 		}
 	}
+	close (FILEHANDLE);
+}
+
+sub makeCache {
+	open(FILEHANDLE, ">.cache"); 
+	print FILEHANDLE $dumped;
 	close (FILEHANDLE);
 }
