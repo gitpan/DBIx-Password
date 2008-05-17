@@ -1,5 +1,11 @@
 Revision history for Perl extension DBIx::Password.
 
+1.9 Fri May 16 15:02:12 PDT 2008
+  - Added getVirtualUser for Jamie
+
+1.8 Tue Dec 19 15:29:39 PST 2006
+  - Added more undef around failures for connections
+
 1.7 Wed Dec 20 13:45:29 PST 2000
 	-Returns undef if DBI connect fails (never has 
 	 occured to me, but I can certainly see it being

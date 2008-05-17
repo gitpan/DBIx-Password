@@ -3,20 +3,9 @@ use strict;
 use DBI();
 
 @DBIx::Password::ISA = qw ( DBI::db );
-($DBIx::Password::VERSION) = ' $Revision: 1.8 $ ' =~ /\$Revision:\s+([^\s]+)/;
+($DBIx::Password::VERSION) = ' $Revision: 1.9 $ ' =~ /\$Revision:\s+([^\s]+)/;
 
-my $virtual1 = {
-              'slash' => {
-                           'username' => '',
-                           'password' => '',
-                           'port' => '',
-                           'database' => 'sdf',
-                           'attributes' => {},
-                           'connect' => 'DBI:mysql:database=sdf;host=asf',
-                           'driver' => 'mysql',
-                           'host' => 'asf'
-                         }
-            };
+my $virtual1 = {};
 
 
 my %driver_cache;
@@ -26,13 +15,15 @@ sub connect {
 	return undef unless $virtual1->{$user};
 	my $self;
 	my $virtual = $virtual1->{$user};
-	return unless $virtual;
+	return undef unless $virtual;
 
 	$self = DBI->connect($virtual->{connect}
 			, $virtual->{'username'}
 			, $virtual->{'password'}
 			, $virtual->{'attributes'}
 			);
+	return undef unless $self;
+
 	bless $self, $class;
 	$driver_cache{$self} = $user;
 	return $self;
@@ -43,13 +34,15 @@ sub connect_cached {
 	return undef unless $virtual1->{$user};
 	my $self;
 	my $virtual = $virtual1->{$user};
+	return undef unless $virtual;
 
 	$self = DBI->connect_cached($virtual->{connect}
 			, $virtual->{'username'}
 			, $virtual->{'password'}
 			, $virtual->{'attributes'}
 			);
-	return unless $self;
+	return undef unless $self;
+
 	bless $self, $class;
 	$driver_cache{$self} = $user;
 	return $self;
@@ -69,15 +62,17 @@ sub getDriver {
 
 sub checkVirtualUser {
 	my ($user) = @_;
-	return 1 
-		if $virtual1->{$user};
+	return $virtual1->{$user} ? 1 : 0;
+}
 
-	return 0;
+sub getVirtualUser {
+	my ($user) = @_;
+	return $virtual1->{$user} || undef;
 }
 
 sub DESTROY {
-    my ($self) = @_;
-    $self->SUPER::DESTROY;
+	my ($self) = @_;
+	$self->SUPER::DESTROY;
 }
 
 1;
@@ -148,7 +143,7 @@ Be sure to answer the questions as you make the module
 
 =head1 HOME
 
-To find out more information look at: http://software.tangent.org/projects.pl?view=DBIxPassword
+To find out more information look at: http://www.tangent.org/DBIx-Password/
 
 =head1 AUTHOR
 

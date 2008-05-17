@@ -150,12 +150,7 @@ sub createPostgreSQL {
 	my $database  = getLine();
 	print "What is the name of the machine that the database is on?\n";
 	my $hostname  = getLine();
-	my $connect;
-	if ($hostname) {
-		$connect = "DBI:$driver:dbname=$database;host=$hostname";
-	} else {
-		$connect = "DBI:$driver:dbname=$database";
-	}
+	my $connect = "DBI:$driver:dbname=$database;host=$hostname";
 	print "Is the database on any special port(you should probably just hit return)?\n";
 	my $port  = getLine();
 	$connect .= ";port=$port" if $port; 

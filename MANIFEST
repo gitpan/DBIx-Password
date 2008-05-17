@@ -7,3 +7,4 @@ Password.pm
 LICENSE
 README
 VERSION
+META.yml                                 Module meta-data (added by MakeMaker)
